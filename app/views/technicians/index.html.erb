@@ -1,0 +1,88 @@
+
+<h1 class="pageTitle">Technician Work Order Scheduling</h1>
+
+
+<!-- Main div for the entire scheduling grid -->
+<div class="scheduleGrid">
+
+	<!-- Creating the left most column displaying the time in hours down the column -->
+	<div class="gridLabels"> 
+		Time
+		<% for i in 0..23 do %>
+		<div class="timeColumn">
+			<% if i == 0%>
+				<%= i + 12 %> am
+			<% elsif i > 0 && i < 12 %>
+				<%= i %> am
+			<% elsif i == 12%>
+				<%= i %> pm
+			<% else %>
+				<%= i - 12 %> pm
+			<% end %> 
+			
+		</div>
+		<% end %>
+
+	</div>
+
+	<!-- Creating one column per technician -->
+	<% @technicians.each do |technician| %>
+	<div class="gridLabels">
+		<%= technician.name %>
+		<% tempPrevEnd = 102 %>
+		<% tempHeight = 0 %>
+
+		<!-- Filtering through the work orders, if the work order matches the correct technician, a work orde rblock is created -->
+		<% @work_orders.each do |work_order| %>
+			<% if work_order.technician_id == technician.id %>
+				<% tempTime = work_order.time.hour * 60 + work_order.time.min + 102 %>  <!-- Creating a temp variable to store the time in an integer format, 102 is added on to align with the corect 60 pixel intervals on the schedule -->
+				
+				<div class="workOrder<%=work_order.location_id%>" style="height: <%=work_order.duation%>px; top: <%=tempTime%>px"> <!-- Because 1 pixel represents 1 minute, height can be set to duration -->
+					<% @locations.each do |location| %>
+						<% if location.id == work_order.location_id %> <!-- Ensuring the location id matches the work order location -->
+
+						<!-- Putting the work order information into the work order block -->
+						<%= location.name %> 
+						(<%= location.city %>) <br>
+						<% end %>
+					<% end %>
+					Start time: 
+					<% if work_order.time.hour < 12 %>
+						<%=work_order.time.strftime('%H:%M am')%>
+					<% elsif work_order.time.hour >= 12 %>
+						<%=work_order.time.strftime('%I:%M pm')%>
+					<% end %>
+					<br>
+					Price: $<%= work_order.price %> 
+				</div>
+
+				<% tempHeight = tempTime - tempPrevEnd %> <!-- calculating the height of the empty block based on the current work order start tiem and the previous order end time -->
+				<div class = "emptyOrder" onclick="timeAlert(<%=tempHeight%>)" style="height: <%=tempHeight%>px; top: <%=tempPrevEnd%>px"> </div>
+				<% tempPrevEnd = tempTime + work_order.duation %> <!-- updating previous end time to prepare for next loop iteration --> 
+				<% tempHeight = tempTime - tempPrevEnd %> <!-- updating the height for the next empty space -->
+			<% end %>
+		<% end %>
+
+		<!-- adding in the final open space for the technician - there are no more work orders matchign his ID -->
+		<div class = "emptyOrder" onclick = "timeAlert(<%=1550-tempPrevEnd%>)"style="height: <%=1550-tempPrevEnd%>px; top: <%=tempPrevEnd%>px"> </div>
+	</div>
+	<%end %>
+</div>
+
+<!-- Using JavaScript to create a pop up window, used confirm method to mimic real world user deciding to conitnue with this time or cancel and select new block -->
+<script type="text/javascript"> 
+	function timeAlert(timeVal) {
+		if (timeVal < 60){
+			confirm("You have "+timeVal+" minutes between your last and next work order")
+		}
+		else if (timeVal == 60){
+			confirm("You have "+(timeVal/60|0)+" hour between your last and next work order")
+		}
+		else if ((timeVal % 60)==0 && timeVal > 60){
+			confirm("You have "+(timeVal/60|0)+" hours between your last and next work order")
+		}
+		else if ((timeVal % 60)!=0 && timeVal > 60){
+			confirm("You have "+(timeVal/60|0)+" hours and "+(timeVal%60)+" minutes between your last and next work order")
+		}
+	}
+</script>

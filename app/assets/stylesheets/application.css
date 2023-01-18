@@ -1,0 +1,92 @@
+
+.pageTitle {
+	text-align: center;
+}
+
+/* Styling for the over scheduling grid, creates the seperate columns for spereate technicians */
+.scheduleGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	border-left: 1px solid black;
+}
+
+/* Styling for the title of each column and the borders of the overall border */
+.gridLabels {
+	text-align: center;
+	border-right: 1px solid black;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+}
+
+/* Styling for the contents in each column, set in 60 pixel intervals to mimic minutes  - height set to 58 to account for borders */
+.timeColumn {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 59px;
+	border-top: 1px solid black;
+}
+
+/* Styling for work orders, followed by the location id to help the viewer seperate locations */
+.workOrder1 {
+	position: absolute;
+	background-color: #ADD8E6;
+	width: 19.75%;
+	border-top: 1px solid black;
+
+	font-size: 12px;
+}
+
+.workOrder2 {
+	position: absolute;
+	background-color: #FFA7A6;
+	width: 19.75%;
+	border-top: 1px solid black;
+
+	font-size: 12px;
+}
+
+.workOrder3 {
+	position: absolute;
+	background-color: #BEE5B0;
+	width: 19.75%;
+	border-top: 1px solid black;
+
+	font-size: 12px;
+}
+
+.workOrder4 {
+	position: absolute;
+	background-color: #FFEEAF;
+	width: 19.75%;
+	border-top: 1px solid black;
+
+	font-size: 12px;
+}
+
+.workOrder5 {
+	position: absolute;
+	background-color: #FED8B1;
+	width: 19.75%;
+	border-top: 1px solid black;
+
+	font-size: 12px;
+}
+
+.workOrder6 {
+	position: absolute;
+	background-color: #DCD0FF;
+	width: 19.75%;
+	border-top: 1px solid black;
+
+	font-size: 12px;
+}
+
+/* styling for empty work blocks */
+.emptyOrder {
+	position: absolute;
+	width: 19.75%;
+	border-top: 1px solid black;
+
+
+}
